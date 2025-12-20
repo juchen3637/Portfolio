@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 
 // Resume data types
 interface WorkExperience {
@@ -32,31 +31,31 @@ type TimelineEntry = WorkExperience | Education;
 const workExperience: WorkExperience[] = [
   {
     type: 'work',
-    company: 'Tech Company',
-    position: 'Senior Software Engineer',
-    location: 'San Francisco, CA',
-    startDate: 'Jan 2023',
+    company: 'The Evaluation Company',
+    position: 'Associate Software Engineer',
+    location: 'New York, NY',
+    startDate: 'Apr 2025',
     endDate: 'Present',
     achievements: [
-      'Led development of scalable web application serving 100K+ users',
-      'Reduced page load time by 40% through optimization strategies',
-      'Mentored team of 3 junior developers',
+      'Developed LLM-powered document-processing pipelines integrated with Salesforce APIs and AWS EC2-based automation services, enabling automated transcript evaluation, translation, and data extraction for 200+ daily cases and reducing external vendor costs by $13K/month.',
+      'Designed and deployed AWS CDK infrastructure for a multi-access portal serving internal staff, applicants, and university partners; implemented CI/CD automation, networking, security, and core services (RDS, S3, ElastiCache, ECS/App Runner).',
+      'Implemented FastAPI backend API using repository pattern with SQLAlchemy ORM, integrating multiple LLM providers for document classification and automated evaluation workflows. Implemented asynchronous task processing with ARQ and Redis for long-running document analysis and PDF generation operations.',
     ],
-    technologies: ['React', 'TypeScript', 'Node.js', 'AWS'],
+    technologies: ['Python', 'FastAPI', 'AWS CDK', 'Salesforce API', 'Redis', 'PostgreSQL'],
   },
   {
     type: 'work',
-    company: 'Startup Inc',
-    position: 'Full Stack Developer',
-    location: 'New York, NY',
-    startDate: 'Jun 2021',
-    endDate: 'Dec 2022',
+    company: 'Colgate-Palmolive',
+    position: 'Software Engineering Intern',
+    location: 'Piscataway, NJ',
+    startDate: 'Jun 2024',
+    endDate: 'Mar 2025',
     achievements: [
-      'Built responsive web applications using modern frameworks',
-      'Implemented RESTful APIs and database schemas',
-      'Collaborated with designers to create intuitive user interfaces',
+      'Resolved 25+ complex frontend and backend Jira tickets, optimizing system responsiveness and user experience for desktop and mobile interfaces.',
+      'Spearheaded the development of shopping cart and mini-cart components using AngularJS and TypeScript, streamlining the purchasing workflow.',
+      'Amplified customer engagement and sales through UX/UI enhancements and seamless navigation improvements.',
     ],
-    technologies: ['Next.js', 'PostgreSQL', 'Tailwind CSS'],
+    technologies: ['AngularJS', 'TypeScript', 'JavaScript'],
   },
 ];
 
@@ -106,7 +105,7 @@ function Section({ id, title, children }: { id: string; title: string; children:
 
 function LandingHero() {
   return (
-    <div className="relative min-h-[80vh] grid place-items-center overflow-hidden">
+    <div className="relative min-h-screen grid place-items-center overflow-hidden">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
@@ -116,7 +115,7 @@ function LandingHero() {
         <p className="uppercase tracking-[0.3em] text-sm text-black/60 dark:text-white/60">Software Developer</p>
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mt-2">Justin Chen</h1>
         <p className="mt-4 text-base sm:text-lg text-black/70 dark:text-white/70 max-w-2xl mx-auto">
-          I build delightful, fast, and accessible web experiences.
+          I build accessible, fast, and scalable software solutions.
         </p>
         <div className="mt-8 flex items-center justify-center gap-4">
           <a href="#featured" className="btn btn-dark">View Projects</a>
@@ -145,7 +144,7 @@ function AboutSection() {
           <Image src="/headshot.jpg" alt="Headshot of Justin Chen" fill className="object-cover" />
         </div>
         <p className="text-black/80 dark:text-white/80 leading-7">
-          I’m Justin, a software developer focused on modern web apps with TypeScript, React, and Node.js. I enjoy crafting clean UI, smooth interactions, and robust systems.
+          I'm Justin, a software engineer specializing in full-stack development and cloud infrastructure. I build LLM-powered automation pipelines, design scalable AWS architectures, and create AI-integrated web applications. From deploying multi-tenant SaaS platforms with real-time data sync to building intelligent document processing systems, I enjoy solving complex problems with clean, maintainable code.
         </p>
       </div>
     </Section>
@@ -158,16 +157,17 @@ function FeaturedProjects() {
       <div className="grid md:grid-cols-2 gap-6">
         <ProjectCard
           title="Cura"
-          description="Privacy-first, AI-powered resume builder using Next.js 14 and Claude Sonnet 4.5 API. Features client-side processing, ATS compliance linting, DOCX/PDF export, and 3 professional templates with live preview."
-          tech={["TypeScript", "React", "Next.js", "Tailwind CSS", "Zustand", "Git", "Supabase"]}
+          description="AI-powered resume tailoring platform that generates job-specific resumes from a master profile. Features intelligent content curation, keyword optimization, inline AI suggestions, and PDF parsing via Claude Vision—built on a multi-tenant SaaS architecture with Row-Level Security and real-time data sync."
+          tech={["Next.js", "TypeScript", "Claude API", "Supabase", "PostgreSQL", "TanStack Query", "Zustand", "Tailwind CSS"]}
           link="https://cura-resume.vercel.app"
           image="/cura-preview.png"
         />
         <ProjectCard
-          title="Project Two"
-          description="Data visualization dashboard with interactive charts."
-          tech={["React", "D3", "Node.js"]}
-          link="#"
+          title="Visualize Emissions"
+          description="Emissions tracking dashboard visualizing Scope 3 carbon footprints from university commuters. Features interactive data visualizations to help stakeholders assess and reduce environmental impact."
+          tech={["React", "Next.js", "TypeScript", "Node.js", "Tailwind CSS", "MongoDB", "MapBox API", "Google Directions API"]}
+          link="https://visualize-emissions.vercel.app/"
+          image="/visualize-emissions-preview.png"
         />
       </div>
     </Section>
@@ -176,7 +176,7 @@ function FeaturedProjects() {
 
 function ProjectCard({ title, description, tech, link, image }: { title: string; description: string; tech: string[]; link: string; image?: string }) {
   return (
-    <a href={link} target="_blank" rel="noopener noreferrer" className="group block rounded-xl border border-black/10 dark:border-white/10 overflow-hidden hover:-translate-y-1 hover:shadow-lg transition bg-white/50 dark:bg-black/20 backdrop-blur">
+    <a href={link} target="_blank" rel="noopener noreferrer" className="group block rounded-xl border border-black/10 dark:border-white/10 overflow-hidden hover:-translate-y-1 hover:shadow-lg transition bg-white/50 dark:bg-black/20 backdrop-blur no-underline">
       {image && (
         <div className="relative w-full h-48 overflow-hidden">
           <Image src={image} alt={`${title} preview`} fill className="object-cover group-hover:scale-105 transition-transform duration-300" />
@@ -199,15 +199,24 @@ function ProjectCard({ title, description, tech, link, image }: { title: string;
 
 function SkillsSection() {
   const skills = [
+    // Languages
+    "Python",
+    "JavaScript",
     "TypeScript",
-    "React",
-    "Next.js",
+    "C++",
+    "Java",
+    // Frameworks & Libraries
+    "React.js",
     "Node.js",
-    "Tailwind CSS",
-    "Bootstrap",
-    "Framer Motion",
+    "Express.js",
+    "Angular",
+    "Next.js",
+    // Developer Tools
     "PostgreSQL",
+    "Git",
     "AWS",
+    "Docker",
+    "CI/CD",
   ];
   return (
     <Section id="skills" title="Software skills">
@@ -224,21 +233,7 @@ function SkillsSection() {
 
 function ExperienceSection() {
   return (
-    <Section id="experience" title="Education & Experience">
-      <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <p className="text-black/70 dark:text-white/70">
-          View my complete work history and download a PDF copy of my resume.
-        </p>
-        <a
-          href="/resume.pdf"
-          download
-          className="btn btn-dark flex items-center gap-2 whitespace-nowrap"
-        >
-          <ArrowDownTrayIcon className="h-5 w-5" />
-          Download Resume PDF
-        </a>
-      </div>
-
+    <Section id="experience" title="Experience & Education">
       <div className="mb-12">
         <h3 className="text-xl font-semibold mb-6">Work Experience</h3>
         <Timeline entries={workExperience} />
@@ -260,20 +255,20 @@ function ContactSection() {
           <p>Email: <a className="underline" href="mailto:juchen3637@gmail.com">juchen3637@gmail.com</a></p>
           <p>Location: New York, NY</p>
         </div>
-        <form className="space-y-3">
+        <form action="https://submit-form.com/Pb0EHY5H" method="POST" className="space-y-3">
           <div>
             <label className="block text-sm mb-1">Name</label>
-            <input className="form-input w-full" placeholder="Your name" />
+            <input name="name" className="form-input w-full text-black" placeholder="Your name" required />
           </div>
           <div>
             <label className="block text-sm mb-1">Email</label>
-            <input type="email" className="form-input w-full" placeholder="you@example.com" />
+            <input type="email" name="email" className="form-input w-full text-black" placeholder="you@example.com" required />
           </div>
           <div>
             <label className="block text-sm mb-1">Message</label>
-            <textarea className="form-textarea w-full" rows={4} placeholder="How can I help?" />
+            <textarea name="message" className="form-textarea w-full text-black" rows={4} placeholder="How can I help?" required />
           </div>
-          <button type="button" className="btn btn-dark">Send</button>
+          <button type="submit" className="btn btn-dark">Send</button>
         </form>
       </div>
     </Section>
@@ -309,7 +304,7 @@ function TimelineItem({ data }: { data: TimelineEntry }) {
   return (
     <div className="relative">
       <div className={`absolute left-0 top-6 h-4 w-4 rounded-full ${dotColor} border-2 border-white dark:border-black shadow-md z-10`} />
-      <div className={`rounded-xl border border-black/10 dark:border-white/10 p-5 sm:p-5 bg-white/50 dark:bg-black/20 backdrop-blur ml-8 ${isWork ? 'hover:-translate-y-1 hover:shadow-lg' : ''} transition`}>
+      <div className="rounded-xl border border-black/10 dark:border-white/10 p-5 sm:p-5 bg-white/50 dark:bg-black/20 backdrop-blur ml-8 hover:-translate-y-1 hover:shadow-lg transition">
         {isWork ? (
           <>
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">

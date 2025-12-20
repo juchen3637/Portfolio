@@ -28,3 +28,11 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Override Bootstrap link underlines for project cards */
+a.group {
+  text-decoration: none !important;
+}
+a.group:hover {
+  text-decoration: none !important;
+}

@@ -1,6 +1,8 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
+import { FaLinkedin, FaGithub, FaFileAlt } from "react-icons/fa";
 
 // Resume data types
 interface WorkExperience {
@@ -82,7 +84,7 @@ const education: Education[] = [
 
 export default function Home() {
   return (
-    <main className="flex flex-col gap-24" id="home">
+    <main className="flex flex-col gap-24 pb-24 md:pb-0" id="home">
       <LandingHero />
       <AboutSection />
       <FeaturedProjects />
@@ -121,6 +123,11 @@ function LandingHero() {
           <a href="#featured" className="btn btn-dark">View Projects</a>
           <a href="#contact" className="btn btn-outline-secondary">Contact</a>
         </div>
+        <div className="mt-6 flex md:hidden items-center justify-center gap-6">
+          <Link href="https://www.linkedin.com/in/jjustinchen/" target="_blank"><FaLinkedin className="h-6 w-6 opacity-80 hover:opacity-100 transition" /></Link>
+          <Link href="https://github.com/juchen3637" target="_blank"><FaGithub className="h-6 w-6 opacity-80 hover:opacity-100 transition" /></Link>
+          <Link href="/resume.pdf" target="_blank"><FaFileAlt className="h-6 w-6 opacity-80 hover:opacity-100 transition" /></Link>
+        </div>
       </motion.div>
       <BackgroundCircles />
     </div>
@@ -140,7 +147,7 @@ function AboutSection() {
   return (
     <Section id="about" title="About me">
       <div className="grid md:grid-cols-[200px_1fr] gap-8 items-start">
-        <div className="relative h-[200px] w-[200px] rounded-xl overflow-hidden border border-black/10 dark:border-white/10">
+        <div className="relative h-[200px] w-[200px] rounded-xl overflow-hidden border border-black/10 dark:border-white/10 mx-auto md:mx-0">
           <Image src="/headshot.jpg" alt="Headshot of Justin Chen" fill className="object-cover" />
         </div>
         <p className="text-black/80 dark:text-white/80 leading-7">

@@ -1,5 +1,5 @@
 "use client";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { HeroSection } from "./components/hero/HeroSection";
 import { GlowingProjectCard } from "./components/projects/GlowingProjectCard";
@@ -137,7 +137,7 @@ function StatTile({
   return (
     <div
       className={`p-4 shadow-p5-yellow ${
-        highlight ? "bg-p5-yellow text-p5-black" : "bg-p5-magenta text-p5-white"
+        highlight ? "bg-p5-yellow text-p5-black animate-breathe" : "bg-p5-magenta text-p5-white"
       }`}
       style={{
         transform: `rotate(${rotate}deg)`,
@@ -211,6 +211,7 @@ function SectionHeader({
   headline: string;
   bgVariant: "magenta" | "black";
 }) {
+  const [glitched, setGlitched] = useState(false);
   return (
     <div className="mb-12 sm:mb-16">
       {/* Eyebrow */}
@@ -231,10 +232,11 @@ function SectionHeader({
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
+        onViewportEnter={() => setGlitched(true)}
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className={`font-display font-black uppercase tracking-tighter text-5xl sm:text-7xl md:text-8xl leading-none italic ${
-          bgVariant === "magenta" ? "text-p5-white" : "text-p5-white"
+        className={`font-display font-black uppercase tracking-tighter text-5xl sm:text-7xl md:text-8xl leading-none italic text-p5-white ${
+          glitched ? "animate-glitch-burst" : ""
         }`}
       >
         {headline}
@@ -403,13 +405,13 @@ function ContactSection() {
             </div>
             <div>
               <div className="text-xs text-p5-fg-muted tracking-widest mb-1">STATUS</div>
-              <div className="bg-p5-yellow text-p5-black inline-block px-2 py-0.5 font-display font-black text-sm">
+              <div className="bg-p5-yellow text-p5-black inline-block px-2 py-0.5 font-display font-black text-sm animate-breathe">
                 ★ OPEN TO HIRE ★
               </div>
             </div>
           </div>
           <p className="mt-6 font-display italic text-sm text-p5-fg-muted">
-            // fastest reply via email
+            {"// fastest reply via email"}
           </p>
         </motion.div>
 
@@ -431,11 +433,6 @@ function ContactSection() {
             <FormField label="EMAIL" name="email" type="email" placeholder="transmission@node" required />
             <FormField label="MESSAGE" name="message" textarea placeholder="Decode thoughts here..." required />
 
-            {status === "success" && (
-              <p className="font-display italic font-bold text-p5-magenta-deep">
-                ★ All-Out Attack incoming. Talk soon!
-              </p>
-            )}
             {status === "error" && (
               <p className="font-display italic font-bold text-red-700">
                 Critical miss. Please try again.
@@ -453,7 +450,47 @@ function ContactSection() {
           </div>
         </motion.form>
       </div>
+
+      <AttackLandedSplash show={status === "success"} />
     </Section>
+  );
+}
+
+function AttackLandedSplash({ show }: { show: boolean }) {
+  return (
+    <AnimatePresence>
+      {show && (
+        <motion.div
+          key="splash"
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0, transition: { duration: 0.3 } }}
+          className="absolute inset-0 z-30 pointer-events-none flex items-center justify-center"
+        >
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-p5-magenta-deep animate-splash-wipe-in"
+          />
+          <motion.div
+            initial={{ scale: 0.4, rotate: -10, opacity: 0 }}
+            animate={{ scale: 1, rotate: -3, opacity: 1 }}
+            exit={{ scale: 0.7, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 500, damping: 18, delay: 0.2 }}
+            className="relative bg-p5-yellow text-p5-black font-display font-black uppercase tracking-tighter italic text-5xl sm:text-7xl px-8 py-4 shadow-p5-black"
+            style={{ clipPath: "polygon(2% 0, 100% 4%, 98% 100%, 0 96%)" }}
+          >
+            ★ ATTACK LANDED ★
+          </motion.div>
+          <motion.div
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 80, opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.4 }}
+            className="absolute bottom-1/3 font-display italic font-bold text-p5-white text-lg"
+          >
+            Talk soon — message received.
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -510,11 +547,19 @@ function Footer() {
         className="absolute inset-0 halftone-red opacity-10 pointer-events-none"
       />
       <div className="relative mx-auto max-w-[1440px] flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="font-display font-black uppercase text-2xl tracking-tighter">
-          JUSTIN<span className="text-p5-magenta">.</span>CHEN
+        <div className="group font-display font-black uppercase text-2xl tracking-tighter cursor-default">
+          JUSTIN
+          <span className="text-p5-magenta inline-block transition-colors group-hover:text-p5-yellow">.</span>
+          CHEN
         </div>
-        <div className="font-label text-xs tracking-widest text-p5-fg-muted">
-          © {new Date().getFullYear()} · NO MORE GAMES
+        <div className="group relative font-label text-xs tracking-widest text-p5-fg-muted cursor-default">
+          <span className="relative inline-block">
+            © {new Date().getFullYear()} · NO MORE GAMES
+            <span
+              aria-hidden
+              className="pointer-events-none absolute left-0 top-1/2 h-[2px] w-full origin-left scale-x-0 bg-p5-yellow transition-transform duration-300 group-hover:scale-x-100"
+            />
+          </span>
         </div>
       </div>
     </footer>

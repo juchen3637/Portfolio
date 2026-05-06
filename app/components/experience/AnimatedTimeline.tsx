@@ -25,24 +25,22 @@ export interface Education {
 
 export type TimelineEntry = WorkExperience | Education;
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
-};
-
 function QuestCard({ data, index }: { data: TimelineEntry; index: number }) {
   const isWork = data.type === "work";
   const isCurrent = isWork && data.endDate === "Present";
   const rotate = index % 2 === 0 ? -1.5 : 1.5;
+  const initialRotate = rotate + (index % 2 === 0 ? -4 : 4);
 
   return (
     <motion.div
-      initial="hidden"
-      whileInView="visible"
+      initial={{ opacity: 0, y: 28, rotate: initialRotate, scale: 0.96 }}
+      whileInView={{ opacity: 1, y: 0, rotate, scale: 1 }}
       viewport={{ once: true, margin: "-40px" }}
-      variants={itemVariants}
-      transition={{ delay: index * 0.08 }}
-      style={{ transform: `rotate(${rotate}deg)` }}
+      transition={{
+        duration: 0.45,
+        ease: [0.2, 0.8, 0.2, 1],
+        delay: index * 0.08,
+      }}
       className={`relative bg-p5-black text-p5-white shadow-p5 ${
         isCurrent ? "animate-pulse-glow" : ""
       }`}

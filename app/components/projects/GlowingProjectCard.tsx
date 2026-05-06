@@ -15,6 +15,27 @@ interface ProjectCardProps {
   rotate?: number;          // -3, +2, -4
 }
 
+function RarityStars({ rarity }: { rarity: string }) {
+  const chars = [...rarity];
+  return (
+    <span className="text-xs tracking-widest text-p5-yellow">
+      {chars.map((c, i) =>
+        c === "★" ? (
+          <span
+            key={i}
+            className="inline-block animate-twinkle"
+            style={{ animationDelay: `${i * 0.18}s` }}
+          >
+            {c}
+          </span>
+        ) : (
+          <span key={i}>{c}</span>
+        )
+      )}
+    </span>
+  );
+}
+
 export function GlowingProjectCard({
   index,
   title,
@@ -32,11 +53,15 @@ export function GlowingProjectCard({
       href={link}
       target="_blank"
       rel="noopener noreferrer"
-      initial={{ opacity: 0, y: 24, rotate: rotate * 1.5 }}
-      whileInView={{ opacity: 1, y: 0, rotate }}
+      initial="hidden"
+      whileInView="visible"
+      whileHover="hover"
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5, ease: "easeOut", delay: index * 0.08 }}
-      whileHover={{ rotate: rotate + 1, y: -4 }}
+      variants={{
+        hidden: { opacity: 0, y: 24, rotate: rotate * 1.5 },
+        visible: { opacity: 1, y: 0, rotate, transition: { duration: 0.5, ease: "easeOut", delay: index * 0.08 } },
+        hover: { rotate: rotate + 1, y: -4 },
+      }}
       className="group relative block bg-p5-white text-p5-black no-underline shadow-p5-black hover:shadow-p5-lg transition-shadow"
       style={{
         clipPath: "polygon(2% 0, 100% 3%, 98% 100%, 0 97%)",
@@ -45,8 +70,22 @@ export function GlowingProjectCard({
       {/* Magenta banner with index + rarity */}
       <div className="bg-p5-magenta text-p5-white px-4 py-2 flex items-center justify-between font-display font-black tracking-tight">
         <span className="text-2xl">{String(index).padStart(2, "0")}</span>
-        <span className="text-xs tracking-widest text-p5-yellow">{rarity}</span>
+        <RarityStars rarity={rarity} />
       </div>
+
+      {/* ALL-OUT ATTACK overlay — slams in on hover */}
+      <motion.div
+        aria-hidden
+        variants={{
+          visible: { scale: 0, rotate: -10, opacity: 0 },
+          hover: { scale: 1, rotate: 4, opacity: 1 },
+        }}
+        transition={{ type: "spring", stiffness: 600, damping: 16 }}
+        className="absolute top-2 right-2 z-10 bg-p5-yellow text-p5-black px-3 py-1 shadow-p5-black font-display font-black uppercase tracking-tight text-xs pointer-events-none"
+        style={{ clipPath: "polygon(6% 0, 100% 4%, 94% 100%, 0 96%)" }}
+      >
+        ★ ALL-OUT ATTACK ★
+      </motion.div>
 
       {/* Optional preview image */}
       {image && (

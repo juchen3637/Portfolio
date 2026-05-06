@@ -20,7 +20,7 @@ export function OrbitingTechStack({ photoSrc }: { photoSrc: string }) {
       {/* Halftone burst rings behind portrait */}
       <div
         aria-hidden
-        className="absolute inset-3 halftone-white opacity-25"
+        className="absolute inset-3 halftone-white opacity-25 animate-burst-pulse"
         style={{
           clipPath: "circle(48% at 50% 50%)",
         }}
@@ -46,7 +46,7 @@ export function OrbitingTechStack({ photoSrc }: { photoSrc: string }) {
       {/* White motion lines — All-Out Attack splay */}
       <svg
         aria-hidden
-        className="absolute -inset-6 pointer-events-none"
+        className="absolute -inset-6 pointer-events-none animate-splay-rotate"
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
       >
@@ -73,7 +73,7 @@ export function OrbitingTechStack({ photoSrc }: { photoSrc: string }) {
 
       {/* Floating tag — Code & Caffeine sticker, P5 style */}
       <div
-        className="absolute -bottom-3 -left-3 bg-p5-yellow text-p5-black font-display font-black text-xs px-3 py-1 -rotate-12 shadow-p5-black"
+        className="absolute -bottom-3 -left-3 bg-p5-yellow text-p5-black font-display font-black text-xs px-3 py-1 shadow-p5-black animate-sticker-wobble"
         style={{ clipPath: "polygon(4% 0, 100% 6%, 96% 100%, 0 94%)" }}
       >
         CODE & CAFFEINE

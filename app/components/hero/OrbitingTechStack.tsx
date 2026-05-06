@@ -1,108 +1,82 @@
 "use client";
 import Image from "next/image";
 
-interface OrbitItem {
-  label: string;
-  icon: string; // emoji fallback — replaced with SVG icons below
-  color: string;
-}
-
-const innerRing: OrbitItem[] = [
-  { label: "Python",  icon: "🐍", color: "#3B82F6" },
-  { label: "Next.js", icon: "▲",  color: "#000000" },
-  { label: "AWS",     icon: "☁",  color: "#F97316" },
-];
-
-const outerRing: OrbitItem[] = [
-  { label: "Claude",     icon: "✦", color: "#6366F1" },
-  { label: "FastAPI",    icon: "⚡", color: "#06B6D4" },
-  { label: "PostgreSQL", icon: "🐘", color: "#3B82F6" },
-  { label: "Docker",     icon: "🐳", color: "#06B6D4" },
-];
-
-function OrbitDot({
-  item,
-  radius,
-  duration,
-  startDeg,
-  reverse,
-}: {
-  item: OrbitItem;
-  radius: number;
-  duration: number;
-  startDeg: number;
-  reverse?: boolean;
-}) {
+/**
+ * Persona-5-style portrait frame: tilted polygon mask with halftone burst rings
+ * radiating from behind, plus white "All-Out Attack" motion lines.
+ */
+export function OrbitingTechStack({ photoSrc }: { photoSrc: string }) {
   return (
-    <div
-      className={reverse ? "animate-orbit-reverse" : "animate-orbit"}
-      style={
-        {
-          "--orbit-radius": `${radius}px`,
-          "--orbit-duration": `${duration}s`,
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          marginTop: "-20px",
-          marginLeft: "-20px",
-          transform: `rotate(${startDeg}deg) translateX(${radius}px) rotate(-${startDeg}deg)`,
-        } as React.CSSProperties
-      }
-    >
+    <div className="relative w-72 h-72 sm:w-96 sm:h-96 flex items-center justify-center">
+      {/* Black polygon backing — slightly larger than the portrait, tilted */}
       <div
-        title={item.label}
-        className="h-10 w-10 rounded-full flex items-center justify-center text-base shadow-md border border-black/10 dark:border-white/15 bg-white dark:bg-zinc-900 select-none"
+        aria-hidden
+        className="absolute inset-0 bg-p5-black -rotate-3 shadow-p5-yellow"
+        style={{
+          clipPath: "polygon(6% 2%, 96% 0, 100% 94%, 4% 100%)",
+        }}
+      />
+
+      {/* Halftone burst rings behind portrait */}
+      <div
+        aria-hidden
+        className="absolute inset-3 halftone-white opacity-25"
+        style={{
+          clipPath: "circle(48% at 50% 50%)",
+        }}
+      />
+
+      {/* Portrait clipped into a tilted polygon */}
+      <div
+        className="relative w-[82%] h-[82%] rotate-2 overflow-hidden"
+        style={{
+          clipPath: "polygon(4% 0, 100% 6%, 96% 100%, 0 94%)",
+        }}
       >
-        {item.icon}
-      </div>
-    </div>
-  );
-}
-
-export function OrbitingTechStack({
-  photoSrc,
-}: {
-  photoSrc: string;
-}) {
-  return (
-    <div className="relative flex items-center justify-center w-72 h-72 sm:w-80 sm:h-80">
-      {/* Orbit ring circles */}
-      <div className="absolute inset-0 rounded-full border border-black/8 dark:border-white/8" />
-      <div className="absolute rounded-full border border-black/8 dark:border-white/8"
-        style={{ inset: "-52px" }} />
-
-      {/* Inner ring items */}
-      {innerRing.map((item, i) => (
-        <OrbitDot
-          key={item.label}
-          item={item}
-          radius={100}
-          duration={14}
-          startDeg={(360 / innerRing.length) * i}
-        />
-      ))}
-
-      {/* Outer ring items */}
-      {outerRing.map((item, i) => (
-        <OrbitDot
-          key={item.label}
-          item={item}
-          radius={152}
-          duration={22}
-          startDeg={(360 / outerRing.length) * i}
-          reverse
-        />
-      ))}
-
-      {/* Center photo */}
-      <div className="relative z-10 h-28 w-28 sm:h-32 sm:w-32 rounded-full overflow-hidden border-2 border-indigo-400/40 shadow-lg shadow-indigo-500/20">
         <Image
           src={photoSrc}
           alt="Justin Chen"
           fill
-          className="object-cover"
+          className="object-cover saturate-[1.2] contrast-[1.15]"
           priority
+          sizes="(min-width: 640px) 384px, 288px"
         />
+      </div>
+
+      {/* White motion lines — All-Out Attack splay */}
+      <svg
+        aria-hidden
+        className="absolute -inset-6 pointer-events-none"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+      >
+        {[...Array(12)].map((_, i) => {
+          const angle = (i / 12) * 360;
+          const x1 = 50 + Math.cos((angle * Math.PI) / 180) * 50;
+          const y1 = 50 + Math.sin((angle * Math.PI) / 180) * 50;
+          const x2 = 50 + Math.cos((angle * Math.PI) / 180) * 60;
+          const y2 = 50 + Math.sin((angle * Math.PI) / 180) * 60;
+          return (
+            <line
+              key={i}
+              x1={x1}
+              y1={y1}
+              x2={x2}
+              y2={y2}
+              stroke="white"
+              strokeWidth="0.5"
+              opacity="0.7"
+            />
+          );
+        })}
+      </svg>
+
+      {/* Floating tag — Code & Caffeine sticker, P5 style */}
+      <div
+        className="absolute -bottom-3 -left-3 bg-p5-yellow text-p5-black font-display font-black text-xs px-3 py-1 -rotate-12 shadow-p5-black"
+        style={{ clipPath: "polygon(4% 0, 100% 6%, 96% 100%, 0 94%)" }}
+      >
+        CODE & CAFFEINE
       </div>
     </div>
   );

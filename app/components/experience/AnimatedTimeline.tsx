@@ -26,35 +26,38 @@ export interface Education {
 export type TimelineEntry = WorkExperience | Education;
 
 const itemVariants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.45, ease: "easeOut" as const } },
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
 };
 
-function TimelineItem({ data, index }: { data: TimelineEntry; index: number }) {
+function QuestCard({ data, index }: { data: TimelineEntry; index: number }) {
   const isWork = data.type === "work";
   const isCurrent = isWork && data.endDate === "Present";
-
-  const dotClass = isWork
-    ? "bg-gradient-to-br from-indigo-500 to-sky-400"
-    : "bg-gradient-to-br from-fuchsia-500 to-rose-400";
+  const rotate = index % 2 === 0 ? -1.5 : 1.5;
 
   return (
     <motion.div
-      className="relative"
-      variants={itemVariants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-40px" }}
+      variants={itemVariants}
       transition={{ delay: index * 0.08 }}
+      style={{ transform: `rotate(${rotate}deg)` }}
+      className={`relative bg-p5-black text-p5-white shadow-p5 ${
+        isCurrent ? "animate-pulse-glow" : ""
+      }`}
     >
-      {/* Timeline dot */}
-      <div
-        className={`absolute -left-[1.15rem] top-6 h-4 w-4 rounded-full ${dotClass} border-2 border-white dark:border-[#0a0a0a] shadow-md z-10 ${
-          isCurrent ? "animate-pulse-glow" : ""
-        }`}
-      />
+      {/* Banner */}
+      <div className="bg-p5-magenta px-4 py-2 flex items-center justify-between">
+        <span className="font-display font-black tracking-tight uppercase text-xs sm:text-sm text-p5-white">
+          {isCurrent ? "★ PRESENT QUEST ★" : isWork ? "COMPLETED" : "ENROLLED"}
+        </span>
+        <span className="font-label text-xs text-p5-yellow tracking-widest">
+          {data.startDate} — {data.endDate}
+        </span>
+      </div>
 
-      <div className="rounded-xl border border-black/10 dark:border-white/10 p-5 bg-white/60 dark:bg-white/[0.03] backdrop-blur ml-6 hover:-translate-y-0.5 hover:shadow-md transition-transform duration-200">
+      <div className="p-5">
         {isWork ? (
           <WorkContent data={data as WorkExperience} />
         ) : (
@@ -68,32 +71,30 @@ function TimelineItem({ data, index }: { data: TimelineEntry; index: number }) {
 function WorkContent({ data }: { data: WorkExperience }) {
   return (
     <>
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
-        <div>
-          <h3 className="text-base font-semibold">{data.position}</h3>
-          <p className="text-sm text-black/65 dark:text-white/65">{data.company}</p>
-          {data.location && (
-            <p className="text-xs text-black/50 dark:text-white/50">{data.location}</p>
-          )}
-        </div>
-        <span className="text-xs text-black/50 dark:text-white/50 whitespace-nowrap shrink-0">
-          {data.startDate} – {data.endDate}
-        </span>
+      <h3 className="font-display font-black tracking-tight uppercase text-xl sm:text-2xl text-p5-white">
+        {data.position}
+      </h3>
+      <div className="bg-p5-yellow text-p5-black inline-block px-2 py-0.5 mt-2 font-display italic font-bold text-xs">
+        {data.company}
+        {data.location ? ` · ${data.location}` : ""}
       </div>
-      <ul className="space-y-2 mb-4">
+      <ul className="mt-4 space-y-2">
         {data.achievements.map((a, i) => (
-          <li key={i} className="text-sm text-black/70 dark:text-white/65 pl-4 relative leading-6">
-            <span className="absolute left-0 text-indigo-500">•</span>
+          <li
+            key={i}
+            className="font-body text-sm leading-6 text-p5-fg pl-4 relative"
+          >
+            <span className="absolute left-0 text-p5-magenta font-bold">▸</span>
             {a}
           </li>
         ))}
       </ul>
       {data.technologies && data.technologies.length > 0 && (
-        <div className="flex flex-wrap gap-2">
+        <div className="mt-4 flex flex-wrap gap-1.5">
           {data.technologies.map((t) => (
             <span
               key={t}
-              className="text-xs px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 text-indigo-700 dark:text-indigo-300"
+              className="bg-p5-white text-p5-black font-label text-[10px] font-semibold tracking-wider px-2 py-0.5"
             >
               {t}
             </span>
@@ -107,25 +108,23 @@ function WorkContent({ data }: { data: WorkExperience }) {
 function EducationContent({ data }: { data: Education }) {
   return (
     <>
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-2">
-        <div>
-          <h3 className="text-base font-semibold">{data.school}</h3>
-          <p className="text-sm text-black/65 dark:text-white/65">
-            {data.degree}{data.field ? ` in ${data.field}` : ""}
-          </p>
-          {data.location && (
-            <p className="text-xs text-black/50 dark:text-white/50">{data.location}</p>
-          )}
-        </div>
-        <span className="text-xs text-black/50 dark:text-white/50 whitespace-nowrap shrink-0">
-          {data.startDate} – {data.endDate}
-        </span>
+      <h3 className="font-display font-black tracking-tight uppercase text-xl text-p5-white">
+        {data.school}
+      </h3>
+      <div className="bg-p5-yellow text-p5-black inline-block px-2 py-0.5 mt-2 font-display italic font-bold text-xs">
+        {data.degree}
+        {data.field ? ` · ${data.field}` : ""}
       </div>
+      {data.location && (
+        <p className="font-label text-xs text-p5-fg-muted mt-2 tracking-wider">
+          {data.location}
+        </p>
+      )}
       {data.highlights && data.highlights.length > 0 && (
-        <ul className="space-y-1 mt-2">
+        <ul className="mt-3 space-y-1">
           {data.highlights.map((h, i) => (
-            <li key={i} className="text-sm text-black/70 dark:text-white/65 pl-4 relative">
-              <span className="absolute left-0 text-fuchsia-500">•</span>
+            <li key={i} className="font-body text-sm text-p5-fg pl-4 relative">
+              <span className="absolute left-0 text-p5-magenta">▸</span>
               {h}
             </li>
           ))}
@@ -137,14 +136,10 @@ function EducationContent({ data }: { data: Education }) {
 
 export function AnimatedTimeline({ entries }: { entries: TimelineEntry[] }) {
   return (
-    <div className="relative pl-4">
-      {/* Vertical line */}
-      <div className="absolute left-[7px] top-4 bottom-0 w-[2px] bg-gradient-to-b from-black/20 via-black/10 to-transparent dark:from-white/20 dark:via-white/10 dark:to-transparent" />
-      <div className="space-y-6">
-        {entries.map((entry, i) => (
-          <TimelineItem key={i} data={entry} index={i} />
-        ))}
-      </div>
+    <div className="space-y-6">
+      {entries.map((entry, i) => (
+        <QuestCard key={i} data={entry} index={i} />
+      ))}
     </div>
   );
 }

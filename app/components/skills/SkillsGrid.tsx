@@ -3,25 +3,35 @@ import { motion } from "framer-motion";
 
 interface SkillGroup {
   label: string;
+  glyph: string;
   skills: string[];
+  rotate: number;
 }
 
 const skillGroups: SkillGroup[] = [
   {
-    label: "Languages",
+    label: "LANGUAGES",
+    glyph: "⚔",
     skills: ["Python", "TypeScript", "JavaScript", "C++", "Java"],
+    rotate: -2,
   },
   {
-    label: "Frameworks",
+    label: "FRAMEWORKS",
+    glyph: "⚙",
     skills: ["React", "Next.js", "FastAPI", "Node.js", "Express", "Angular", "SQLAlchemy"],
+    rotate: 2,
   },
   {
-    label: "Cloud & Infra",
+    label: "CLOUD & INFRA",
+    glyph: "☁",
     skills: ["AWS CDK", "EC2", "ECS", "RDS", "S3", "ElastiCache", "Docker", "PostgreSQL", "Redis", "CI/CD"],
+    rotate: -2,
   },
   {
     label: "AI / LLM",
-    skills: ["Claude API", "OpenAI API", "LangChain", "LLM Pipelines", "RAG", "Prompt Engineering", "ARQ"],
+    glyph: "✦",
+    skills: ["Claude API", "OpenAI", "LangChain", "LLM Pipelines", "RAG", "Prompt Engineering", "ARQ"],
+    rotate: 2,
   },
 ];
 
@@ -32,44 +42,46 @@ const containerVariants = {
   },
 };
 
-const badgeVariants = {
-  hidden: { opacity: 0, scale: 0.85, y: 8 },
+const chipVariants = {
+  hidden: { opacity: 0, scale: 0.8, y: 6 },
   visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" as const } },
-};
-
-const groupVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" as const } },
 };
 
 export function SkillsGrid() {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="grid sm:grid-cols-2 gap-6 sm:gap-8">
       {skillGroups.map((group, gi) => (
         <motion.div
           key={group.label}
-          variants={groupVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ delay: gi * 0.1 }}
+          initial={{ opacity: 0, y: 24, rotate: group.rotate * 2 }}
+          whileInView={{ opacity: 1, y: 0, rotate: group.rotate }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, ease: "easeOut", delay: gi * 0.08 }}
+          className="bg-p5-black text-p5-white shadow-p5"
+          style={{
+            clipPath: "polygon(2% 0, 100% 3%, 98% 100%, 0 97%)",
+          }}
         >
-          <p className="text-xs font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 mb-3">
-            {group.label}
-          </p>
+          {/* Group banner */}
+          <div className="bg-p5-magenta px-4 py-2 flex items-center gap-2 font-display font-black tracking-tight">
+            <span className="text-xl">{group.glyph}</span>
+            <span className="uppercase text-lg sm:text-xl">{group.label}</span>
+          </div>
+
+          {/* Skill chips */}
           <motion.div
-            className="flex flex-wrap gap-2"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-40px" }}
+            className="p-4 sm:p-5 flex flex-wrap gap-2"
           >
             {group.skills.map((skill) => (
               <motion.span
                 key={skill}
-                variants={badgeVariants}
-                whileHover={{ scale: 1.06 }}
-                className="px-3 py-1.5 rounded-full text-sm border border-black/10 dark:border-white/12 bg-black/3 dark:bg-white/4 hover:border-indigo-400/50 dark:hover:border-indigo-400/40 hover:shadow-[0_0_8px_0_rgb(99_102_241/0.3)] transition-shadow cursor-default select-none"
+                variants={chipVariants}
+                whileHover={{ scale: 1.06, rotate: -2 }}
+                className="bg-p5-white text-p5-black px-3 py-1 font-label font-semibold text-xs tracking-wide cursor-default select-none"
               >
                 {skill}
               </motion.span>

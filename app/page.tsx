@@ -1,6 +1,4 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { HeroSection } from "./components/hero/HeroSection";
@@ -27,7 +25,7 @@ const workExperience: WorkExperience[] = [
       "Deployed AWS CDK infrastructure for a multi-access portal; implemented CI/CD, RDS, S3, ElastiCache, and ECS/App Runner with full networking and security configuration.",
       "Built FastAPI backend with SQLAlchemy ORM and async task processing via ARQ and Redis for multi-LLM document classification and PDF generation workflows.",
     ],
-    technologies: ["Python", "FastAPI", "AWS CDK", "Claude API", "Salesforce API", "Redis", "PostgreSQL"],
+    technologies: ["Python", "FastAPI", "AWS CDK", "Claude API", "Redis", "PostgreSQL"],
   },
   {
     type: "work",
@@ -68,7 +66,7 @@ const education: Education[] = [
 
 export default function Home() {
   return (
-    <main className="flex flex-col gap-24">
+    <main>
       <HeroSection />
       <AboutSection />
       <FeaturedProjects />
@@ -80,129 +78,267 @@ export default function Home() {
   );
 }
 
-// ── Shared section wrapper ────────────────────────────────────────────────────
-
-function Section({
-  id,
-  title,
-  children,
-}: {
-  id: string;
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section id={id} className="px-6 sm:px-10 md:px-16 lg:px-24">
-      <motion.h2
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.45, ease: "easeOut" }}
-        className="text-2xl sm:text-3xl font-semibold mb-8 tracking-tight"
-      >
-        {title}
-      </motion.h2>
-      {children}
-    </section>
-  );
-}
-
-// ── About ─────────────────────────────────────────────────────────────────────
-
 function AboutSection() {
   return (
-    <Section id="about" title="About me">
-      <motion.div
-        className="grid md:grid-cols-[200px_1fr] gap-8 items-start"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-      >
-        <div className="relative h-[200px] w-[200px] rounded-xl overflow-hidden border border-black/10 dark:border-white/10 shadow-sm">
-          <Image
-            src="/headshot.jpg"
-            alt="Headshot of Justin Chen"
-            fill
-            className="object-cover"
-          />
-        </div>
-        <p className="text-black/75 dark:text-white/75 leading-7">
-          I'm Justin, a software engineer specializing in LLM integration and full-stack development.
-          I build intelligent document-processing pipelines, design scalable AWS cloud architectures,
-          and create AI-powered web applications — from multi-tenant SaaS platforms with real-time
-          data sync to automated evaluation systems using Claude and other LLM providers. I enjoy
-          solving complex problems at the intersection of language models and production engineering.
-        </p>
-      </motion.div>
+    <Section
+      id="about"
+      eyebrow="01 / ABOUT"
+      headline="WHO IS THIS GUY?"
+      bgVariant="black"
+    >
+      <div className="grid md:grid-cols-3 gap-8 items-start">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5 }}
+          className="md:col-span-2 bg-p5-white text-p5-black p-6 sm:p-8 -rotate-1 shadow-p5"
+          style={{ clipPath: "polygon(2% 0, 100% 3%, 98% 100%, 0 97%)" }}
+        >
+          <p className="font-body text-base sm:text-lg leading-7">
+            I&apos;m Justin, a software engineer specializing in{" "}
+            <strong className="bg-p5-yellow text-p5-black px-1">LLM integration</strong>{" "}
+            and full-stack development. I build intelligent document-processing
+            pipelines, design scalable AWS cloud architectures, and create AI-powered
+            web applications — from multi-tenant SaaS platforms with real-time data
+            sync to automated evaluation systems using Claude and other LLM providers.
+            I enjoy solving complex problems at the intersection of language models
+            and production engineering.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="flex flex-col gap-4"
+        >
+          <StatTile label="BASED IN" value="NEW YORK" rotate={2} />
+          <StatTile label="FOCUS" value="LLM × FULL-STACK" rotate={-2} />
+          <StatTile label="STATUS" value="OPEN TO HIRE ★" highlight rotate={2} />
+        </motion.div>
+      </div>
     </Section>
   );
 }
 
-// ── Projects ──────────────────────────────────────────────────────────────────
+function StatTile({
+  label,
+  value,
+  highlight,
+  rotate = 0,
+}: {
+  label: string;
+  value: string;
+  highlight?: boolean;
+  rotate?: number;
+}) {
+  return (
+    <div
+      className={`p-4 shadow-p5-yellow ${
+        highlight ? "bg-p5-yellow text-p5-black" : "bg-p5-magenta text-p5-white"
+      }`}
+      style={{
+        transform: `rotate(${rotate}deg)`,
+        clipPath: "polygon(3% 0, 100% 4%, 97% 100%, 0 96%)",
+      }}
+    >
+      <div className="font-label text-xs tracking-widest opacity-80 mb-1">
+        {label}
+      </div>
+      <div className="font-display font-black tracking-tight uppercase text-xl">
+        {value}
+      </div>
+    </div>
+  );
+}
+
+// ── Section wrapper ─────────────────────────────────────────────────────────
+
+function Section({
+  id,
+  eyebrow,
+  headline,
+  bgVariant = "magenta",
+  children,
+}: {
+  id: string;
+  eyebrow: string;
+  headline: string;
+  bgVariant?: "magenta" | "black";
+  children: React.ReactNode;
+}) {
+  const isMagenta = bgVariant === "magenta";
+  return (
+    <section
+      id={id}
+      className={`relative overflow-hidden py-20 sm:py-28 ${
+        isMagenta ? "bg-p5-magenta" : "bg-p5-bg"
+      }`}
+    >
+      {/* Halftone backdrop */}
+      <div
+        aria-hidden
+        className={`absolute inset-0 pointer-events-none opacity-10 ${
+          isMagenta ? "halftone-white" : "halftone-red"
+        } animate-halftone-drift`}
+      />
+
+      {/* Tilted black slash decoration */}
+      {isMagenta && (
+        <div
+          aria-hidden
+          className="absolute top-1/3 -right-20 w-96 h-32 bg-p5-black -rotate-6 opacity-90 pointer-events-none"
+          style={{ clipPath: "polygon(0 20%, 100% 0, 100% 100%, 0 80%)" }}
+        />
+      )}
+
+      <div className="relative mx-auto max-w-[1440px] px-6 sm:px-10">
+        <SectionHeader eyebrow={eyebrow} headline={headline} bgVariant={bgVariant} />
+        {children}
+      </div>
+    </section>
+  );
+}
+
+function SectionHeader({
+  eyebrow,
+  headline,
+  bgVariant,
+}: {
+  eyebrow: string;
+  headline: string;
+  bgVariant: "magenta" | "black";
+}) {
+  return (
+    <div className="mb-12 sm:mb-16">
+      {/* Eyebrow */}
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.4 }}
+        className={`inline-block ${
+          bgVariant === "magenta" ? "bg-p5-black text-p5-white" : "bg-p5-magenta text-p5-white"
+        } font-label font-bold text-xs tracking-widest px-3 py-1.5 -rotate-2 mb-4 shadow-p5-yellow`}
+        style={{ clipPath: "polygon(4% 0, 100% 0, 96% 100%, 0 100%)" }}
+      >
+        {eyebrow}
+      </motion.div>
+
+      {/* Slashing headline */}
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className={`font-display font-black uppercase tracking-tighter text-5xl sm:text-7xl md:text-8xl leading-none italic ${
+          bgVariant === "magenta" ? "text-p5-white" : "text-p5-white"
+        }`}
+      >
+        {headline}
+      </motion.h2>
+    </div>
+  );
+}
+
+// ── Featured Projects ──────────────────────────────────────────────────────
 
 function FeaturedProjects() {
   return (
-    <Section id="featured" title="Featured projects">
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <Section
+      id="featured"
+      eyebrow="02 / WORK"
+      headline="PROJECTS / EQUIPPED"
+      bgVariant="black"
+    >
+      <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
         <GlowingProjectCard
+          index={1}
           title="Cura"
-          description="AI-powered resume tailoring platform that generates job-specific resumes from a master profile using Claude API. Features intelligent content curation, keyword optimization, inline AI suggestions, and PDF parsing via Claude Vision — built on a multi-tenant SaaS architecture with Row-Level Security and real-time data sync."
-          tech={["Next.js", "TypeScript", "Claude API", "Supabase", "PostgreSQL", "TanStack Query", "Zustand", "Tailwind CSS"]}
+          subtitle="AI Resume Persona · NULL: Rewrites"
+          description="AI-powered resume tailoring platform that generates job-specific resumes from a master profile using Claude API. Features intelligent content curation, keyword optimization, inline AI suggestions, and PDF parsing via Claude Vision."
+          tech={["Next.js", "TypeScript", "Claude API", "Supabase", "PostgreSQL", "TanStack Query", "Zustand", "Tailwind"]}
           link="https://cura-resume.vercel.app"
+          cta="VIEW LIVE →"
+          rarity="★★★★ EPIC"
           image="/cura-preview.png"
+          rotate={-2}
         />
         <GlowingProjectCard
+          index={2}
           title="Alpaca Trading Agent"
-          description="End-to-end algorithmic trading system in Python with the Alpaca REST/WebSocket API for real-time order management; deployed on AWS EC2 as a persistent systemd service with a Dash monitoring dashboard. Includes an agentic CI/CD pipeline using Claude Code in rootless Podman containers with autonomous PR creation via Telegram — zero manual SSH access required."
-          tech={["Python", "Alpaca API", "AWS EC2", "Dash", "Claude Code", "Podman", "Telegram Bot API", "systemd"]}
+          subtitle="Algo-Trading Persona · STR: Shipping"
+          description="End-to-end algorithmic trading system in Python with the Alpaca REST/WebSocket API; deployed on AWS EC2 as a persistent systemd service with a Dash monitoring dashboard. Includes an agentic CI/CD pipeline using Claude Code in rootless Podman containers."
+          tech={["Python", "Alpaca API", "AWS EC2", "Dash", "Claude Code", "Podman", "Telegram", "systemd"]}
           link="https://github.com/juchen3637/AlpacaTradingAgent"
+          cta="GITHUB →"
+          rarity="★★★ RARE"
           image="/alpaca-trading-preview.png"
+          rotate={1}
         />
         <GlowingProjectCard
-          title="Prediction Market Bot"
-          description="Automated prediction market trading system scanning Kalshi and Polymarket, using a multi-LLM ensemble (Anthropic, OpenAI, Gemini) and XGBoost with Kelly criterion position sizing. Deployed microservices pipeline on AWS EC2 with Prometheus/Grafana observability; includes Brier score tracking and 80/20 backtesting on 500+ resolved markets for continuous XGBoost retraining."
-          tech={["Python", "XGBoost", "Claude API", "OpenAI API", "Gemini API", "Prometheus", "Grafana", "AWS EC2"]}
+          index={3}
+          title="Predict-Market-Bot"
+          subtitle="Ensemble Persona · WEAK: Sleep"
+          description="Automated prediction market trading system scanning Kalshi and Polymarket, using a multi-LLM ensemble (Anthropic, OpenAI, Gemini) and XGBoost with Kelly criterion position sizing. Deployed microservices on AWS EC2 with Prometheus/Grafana observability."
+          tech={["Python", "XGBoost", "Claude", "OpenAI", "Gemini", "Prometheus", "Grafana", "AWS EC2"]}
           link="https://github.com/juchen3637/predict-market-bot"
+          cta="GITHUB →"
+          rarity="★★★★ EPIC"
           image="/predict-market-preview.png"
+          rotate={-1}
         />
       </div>
     </Section>
   );
 }
 
-// ── Skills ────────────────────────────────────────────────────────────────────
+// ── Skills ───────────────────────────────────────────────────────────────────
 
 function SkillsSection() {
   return (
-    <Section id="skills" title="Software skills">
+    <Section
+      id="skills"
+      eyebrow="03 / STACK"
+      headline="WEAPONS & ARTS"
+      bgVariant="magenta"
+    >
       <SkillsGrid />
     </Section>
   );
 }
 
-// ── Experience ────────────────────────────────────────────────────────────────
+// ── Experience ───────────────────────────────────────────────────────────────
 
 function ExperienceSection() {
   return (
-    <Section id="experience" title="Experience & Education">
-      <div className="mb-12">
-        <h3 className="text-base font-semibold mb-6 text-black/60 dark:text-white/60 uppercase tracking-wider text-xs">
-          Work Experience
-        </h3>
-        <AnimatedTimeline entries={workExperience} />
-      </div>
-      <div>
-        <h3 className="text-base font-semibold mb-6 text-black/60 dark:text-white/60 uppercase tracking-wider text-xs">
-          Education
-        </h3>
-        <AnimatedTimeline entries={education} />
+    <Section
+      id="experience"
+      eyebrow="04 / DEEDS"
+      headline="QUEST LOG"
+      bgVariant="black"
+    >
+      <div className="grid md:grid-cols-2 gap-10">
+        <div>
+          <h3 className="font-label font-bold text-xs tracking-widest text-p5-yellow mb-6">
+            ▸ WORK EXPERIENCE
+          </h3>
+          <AnimatedTimeline entries={workExperience} />
+        </div>
+        <div>
+          <h3 className="font-label font-bold text-xs tracking-widest text-p5-yellow mb-6">
+            ▸ EDUCATION
+          </h3>
+          <AnimatedTimeline entries={education} />
+        </div>
       </div>
     </Section>
   );
 }
 
-// ── Contact ───────────────────────────────────────────────────────────────────
+// ── Contact ─────────────────────────────────────────────────────────────────
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
@@ -214,7 +350,6 @@ function ContactSection() {
     setStatus("submitting");
     const form = e.currentTarget;
     const data = new FormData(form);
-
     try {
       const res = await fetch("https://submit-form.com/Pb0EHY5H", {
         method: "POST",
@@ -233,95 +368,155 @@ function ContactSection() {
   }
 
   return (
-    <Section id="contact" title="Contact">
-      <div className="grid sm:grid-cols-2 gap-10">
+    <Section
+      id="contact"
+      eyebrow="05 / SUMMON"
+      headline="TAKE MY HEART → HIRE ME"
+      bgVariant="magenta"
+    >
+      <div className="grid md:grid-cols-2 gap-8">
+        {/* Contact info card */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.45 }}
-          className="flex flex-col gap-2 text-sm text-black/70 dark:text-white/70"
+          initial={{ opacity: 0, y: 20, rotate: -3 }}
+          whileInView={{ opacity: 1, y: 0, rotate: -2 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5 }}
+          className="bg-p5-black text-p5-white p-6 sm:p-8 shadow-p5-yellow"
+          style={{ clipPath: "polygon(2% 0, 100% 3%, 98% 100%, 0 97%)" }}
         >
-          <p>
-            Email:{" "}
-            <a
-              className="text-indigo-600 dark:text-indigo-400 hover:underline"
-              href="mailto:juchen3637@gmail.com"
-            >
-              juchen3637@gmail.com
-            </a>
+          <div className="bg-p5-magenta inline-block px-3 py-1 -rotate-1 font-display font-black uppercase tracking-tight text-lg mb-6">
+            CONTACT INFO
+          </div>
+          <div className="space-y-4 font-label">
+            <div>
+              <div className="text-xs text-p5-fg-muted tracking-widest mb-1">EMAIL</div>
+              <a
+                href="mailto:juchen3637@gmail.com"
+                className="text-p5-yellow hover:underline font-display font-bold text-lg"
+              >
+                juchen3637@gmail.com
+              </a>
+            </div>
+            <div>
+              <div className="text-xs text-p5-fg-muted tracking-widest mb-1">LOCATION</div>
+              <div className="font-display font-bold text-lg">New York, NY</div>
+            </div>
+            <div>
+              <div className="text-xs text-p5-fg-muted tracking-widest mb-1">STATUS</div>
+              <div className="bg-p5-yellow text-p5-black inline-block px-2 py-0.5 font-display font-black text-sm">
+                ★ OPEN TO HIRE ★
+              </div>
+            </div>
+          </div>
+          <p className="mt-6 font-display italic text-sm text-p5-fg-muted">
+            // fastest reply via email
           </p>
-          <p>Location: New York, NY</p>
         </motion.div>
 
+        {/* Contact form */}
         <motion.form
+          initial={{ opacity: 0, y: 20, rotate: 3 }}
+          whileInView={{ opacity: 1, y: 0, rotate: 2 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, delay: 0.1 }}
           onSubmit={handleSubmit}
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.45, delay: 0.1 }}
-          className="space-y-4"
+          className="bg-p5-white text-p5-black shadow-p5-black"
+          style={{ clipPath: "polygon(2% 0, 100% 3%, 98% 100%, 0 97%)" }}
         >
-          <div>
-            <label className="block text-sm mb-1.5 font-medium">Name</label>
-            <input
-              name="name"
-              required
-              placeholder="Your name"
-              className="w-full rounded-lg border border-black/15 dark:border-white/15 bg-black/3 dark:bg-white/4 px-3 py-2.5 text-sm placeholder:text-black/35 dark:placeholder:text-white/35 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition"
-            />
+          <div className="bg-p5-magenta px-4 py-2 font-display font-black uppercase tracking-tight text-lg text-p5-white">
+            SEND MESSAGE
           </div>
-          <div>
-            <label className="block text-sm mb-1.5 font-medium">Email</label>
-            <input
-              type="email"
-              name="email"
-              required
-              placeholder="you@example.com"
-              className="w-full rounded-lg border border-black/15 dark:border-white/15 bg-black/3 dark:bg-white/4 px-3 py-2.5 text-sm placeholder:text-black/35 dark:placeholder:text-white/35 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition"
-            />
-          </div>
-          <div>
-            <label className="block text-sm mb-1.5 font-medium">Message</label>
-            <textarea
-              name="message"
-              required
-              rows={4}
-              placeholder="How can I help?"
-              className="w-full rounded-lg border border-black/15 dark:border-white/15 bg-black/3 dark:bg-white/4 px-3 py-2.5 text-sm placeholder:text-black/35 dark:placeholder:text-white/35 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition resize-none"
-            />
-          </div>
+          <div className="p-6 sm:p-8 space-y-4">
+            <FormField label="NAME" name="name" placeholder="Your designation" required />
+            <FormField label="EMAIL" name="email" type="email" placeholder="transmission@node" required />
+            <FormField label="MESSAGE" name="message" textarea placeholder="Decode thoughts here..." required />
 
-          {status === "success" && (
-            <p className="text-sm text-emerald-600 dark:text-emerald-400 font-medium">
-              Message sent — I'll be in touch soon!
-            </p>
-          )}
-          {status === "error" && (
-            <p className="text-sm text-rose-600 dark:text-rose-400 font-medium">
-              Something went wrong. Please try again.
-            </p>
-          )}
+            {status === "success" && (
+              <p className="font-display italic font-bold text-p5-magenta-deep">
+                ★ All-Out Attack incoming. Talk soon!
+              </p>
+            )}
+            {status === "error" && (
+              <p className="font-display italic font-bold text-red-700">
+                Critical miss. Please try again.
+              </p>
+            )}
 
-          <button
-            type="submit"
-            disabled={status === "submitting" || status === "success"}
-            className="px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium text-sm transition-colors cursor-pointer"
-          >
-            {status === "submitting" ? "Sending…" : "Send"}
-          </button>
+            <button
+              type="submit"
+              disabled={status === "submitting" || status === "success"}
+              className="bg-p5-black text-p5-white font-display font-black tracking-tight uppercase text-base px-6 py-3 shadow-p5 hover:bg-p5-yellow hover:text-p5-black disabled:opacity-60 disabled:cursor-not-allowed transition-colors -rotate-1"
+              style={{ clipPath: "polygon(4% 0, 100% 4%, 96% 100%, 0 96%)" }}
+            >
+              {status === "submitting" ? "Sending…" : "Send →"}
+            </button>
+          </div>
         </motion.form>
       </div>
     </Section>
   );
 }
 
-// ── Footer ────────────────────────────────────────────────────────────────────
+function FormField({
+  label,
+  name,
+  type = "text",
+  placeholder,
+  required,
+  textarea,
+}: {
+  label: string;
+  name: string;
+  type?: string;
+  placeholder?: string;
+  required?: boolean;
+  textarea?: boolean;
+}) {
+  const baseClass =
+    "w-full bg-p5-white text-p5-black border-[3px] border-p5-black px-3 py-2.5 font-body text-sm placeholder:text-p5-black/35 focus:outline-none focus:border-p5-magenta focus:ring-2 focus:ring-p5-magenta transition-colors";
+  return (
+    <label className="block">
+      <span className="block font-label font-bold text-xs tracking-widest mb-1.5">
+        {label}
+      </span>
+      {textarea ? (
+        <textarea
+          name={name}
+          required={required}
+          rows={4}
+          placeholder={placeholder}
+          className={`${baseClass} resize-none`}
+        />
+      ) : (
+        <input
+          type={type}
+          name={name}
+          required={required}
+          placeholder={placeholder}
+          className={baseClass}
+        />
+      )}
+    </label>
+  );
+}
+
+// ── Footer ───────────────────────────────────────────────────────────────────
 
 function Footer() {
   return (
-    <footer className="px-6 sm:px-10 md:px-16 lg:px-24 py-10 text-xs text-black/30 dark:text-white/30 text-center">
-      © {new Date().getFullYear()} Justin Chen
+    <footer className="relative bg-p5-black text-p5-white py-10 px-6 sm:px-10 overflow-hidden">
+      <div
+        aria-hidden
+        className="absolute inset-0 halftone-red opacity-10 pointer-events-none"
+      />
+      <div className="relative mx-auto max-w-[1440px] flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="font-display font-black uppercase text-2xl tracking-tighter">
+          JUSTIN<span className="text-p5-magenta">.</span>CHEN
+        </div>
+        <div className="font-label text-xs tracking-widest text-p5-fg-muted">
+          © {new Date().getFullYear()} · NO MORE GAMES
+        </div>
+      </div>
     </footer>
   );
 }

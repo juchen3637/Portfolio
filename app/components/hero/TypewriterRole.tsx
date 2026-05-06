@@ -1,5 +1,4 @@
 "use client";
-import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const roles = [
@@ -9,29 +8,35 @@ const roles = [
 ];
 
 export function TypewriterRole() {
-  const [index, setIndex] = useState(0);
+  const [active, setActive] = useState(0);
 
   useEffect(() => {
     const id = setInterval(() => {
-      setIndex((i) => (i + 1) % roles.length);
+      setActive((i) => (i + 1) % roles.length);
     }, 3000);
     return () => clearInterval(id);
   }, []);
 
   return (
-    <span className="inline-flex h-8 sm:h-10 items-center overflow-hidden">
-      <AnimatePresence mode="wait">
-        <motion.span
-          key={roles[index]}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -16 }}
-          transition={{ duration: 0.35, ease: "easeOut" }}
-          className="text-indigo-600 dark:text-indigo-400 font-semibold whitespace-nowrap"
-        >
-          {roles[index]}
-        </motion.span>
-      </AnimatePresence>
-    </span>
+    <div className="flex flex-col gap-2 items-start">
+      {roles.map((role, i) => {
+        const isActive = i === active;
+        return (
+          <div
+            key={role}
+            className={`px-4 py-2 font-display font-black tracking-tight uppercase text-2xl sm:text-3xl md:text-4xl transition-all duration-300 ${
+              isActive
+                ? "bg-p5-yellow text-p5-black -rotate-1 shadow-p5-black"
+                : "bg-p5-black text-p5-white shadow-p5-yellow"
+            }`}
+            style={{
+              clipPath: "polygon(2% 0, 100% 4%, 98% 100%, 0 96%)",
+            }}
+          >
+            {role}
+          </div>
+        );
+      })}
+    </div>
   );
 }

@@ -1,69 +1,136 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/forms";
 
+/* ── Persona 5 / "Acid Graphic Noir" palette ─────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --p5-bg: #1f0f10;          /* deep magenta-tinted black */
+  --p5-black: #0b0b0b;
+  --p5-magenta: #e0114e;
+  --p5-magenta-deep: #91002e;
+  --p5-white: #ffffff;
+  --p5-yellow: #ffd300;
+  --p5-fg: #fbdbdc;          /* on-surface */
+  --p5-fg-muted: #e5bdbf;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #f8fafc;
-  }
+@theme {
+  --color-p5-bg: #1f0f10;
+  --color-p5-black: #0b0b0b;
+  --color-p5-magenta: #e0114e;
+  --color-p5-magenta-deep: #91002e;
+  --color-p5-white: #ffffff;
+  --color-p5-yellow: #ffd300;
+  --color-p5-fg: #fbdbdc;
+  --color-p5-fg-muted: #e5bdbf;
+  --font-display: var(--font-epilogue);
+  --font-label: var(--font-space-grotesk);
+  --font-body: var(--font-inter);
 }
 
 html {
   scroll-behavior: smooth;
+  background: var(--p5-bg);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  background: var(--p5-bg);
+  color: var(--p5-fg);
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Orbit animation for tech stack rings */
-@keyframes orbit {
-  from { transform: rotate(0deg) translateX(var(--orbit-radius)) rotate(0deg); }
-  to   { transform: rotate(360deg) translateX(var(--orbit-radius)) rotate(-360deg); }
+/* ── Halftone dot textures ─────────────────────────────────────────────────
+   Use as background image on any element. Tile size controls density. */
+.halftone-red {
+  background-image: radial-gradient(circle at center, var(--p5-magenta) 28%, transparent 30%);
+  background-size: 12px 12px;
+}
+.halftone-white {
+  background-image: radial-gradient(circle at center, rgba(255, 255, 255, 0.85) 28%, transparent 30%);
+  background-size: 12px 12px;
+}
+.halftone-black {
+  background-image: radial-gradient(circle at center, var(--p5-black) 28%, transparent 30%);
+  background-size: 12px 12px;
+}
+.halftone-burst {
+  background-image: radial-gradient(circle at center, var(--p5-white) 0 1px, transparent 2px),
+    repeating-conic-gradient(from 0deg, var(--p5-magenta) 0deg 8deg, transparent 8deg 16deg);
+  background-blend-mode: screen;
+  opacity: 0.85;
 }
 
-/* Reverse orbit */
-@keyframes orbit-reverse {
-  from { transform: rotate(0deg) translateX(var(--orbit-radius)) rotate(0deg); }
-  to   { transform: rotate(-360deg) translateX(var(--orbit-radius)) rotate(360deg); }
+/* ── Hard-offset drop shadows (Persona 5 style) ────────────────────────── */
+.shadow-p5 {
+  box-shadow: 6px 6px 0 0 var(--p5-magenta);
+}
+.shadow-p5-black {
+  box-shadow: 6px 6px 0 0 var(--p5-black);
+}
+.shadow-p5-yellow {
+  box-shadow: 6px 6px 0 0 var(--p5-yellow);
+}
+.shadow-p5-lg {
+  box-shadow: 10px 10px 0 0 var(--p5-magenta);
 }
 
-/* Pulse glow for active timeline dot */
+/* ── Polygon clip-paths (irregular "cut paper" rectangles) ─────────────── */
+.clip-polygon-a {
+  clip-path: polygon(2% 0, 100% 3%, 98% 100%, 0 96%);
+}
+.clip-polygon-b {
+  clip-path: polygon(0 4%, 96% 0, 100% 95%, 4% 100%);
+}
+.clip-polygon-c {
+  clip-path: polygon(0 0, 100% 6%, 96% 100%, 4% 94%);
+}
+.clip-banner {
+  clip-path: polygon(0 0, 100% 0, 96% 100%, 4% 100%);
+}
+.clip-banner-rev {
+  clip-path: polygon(4% 0, 96% 0, 100% 100%, 0 100%);
+}
+.clip-tab {
+  clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
+}
+
+/* ── Pulse glow for active timeline / current quest ────────────────────── */
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgb(99 102 241 / 0.5); }
-  50%       { box-shadow: 0 0 0 8px rgb(99 102 241 / 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgb(224 17 78 / 0.55); }
+  50%      { box-shadow: 0 0 0 12px rgb(224 17 78 / 0); }
 }
-
-.animate-orbit {
-  animation: orbit var(--orbit-duration, 12s) linear infinite;
-}
-
-.animate-orbit-reverse {
-  animation: orbit-reverse var(--orbit-duration, 18s) linear infinite;
-}
-
 .animate-pulse-glow {
   animation: pulse-glow 2s ease-in-out infinite;
 }
 
+/* Halftone slow drift on big background panels */
+@keyframes halftone-drift {
+  from { background-position: 0 0; }
+  to   { background-position: 12px 12px; }
+}
+.animate-halftone-drift {
+  animation: halftone-drift 10s linear infinite;
+}
+
+/* ── Reduced motion ────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .animate-orbit,
-  .animate-orbit-reverse,
-  .animate-pulse-glow {
+  .animate-pulse-glow,
+  .animate-halftone-drift {
     animation: none;
   }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Focus ring (keyboard a11y) */
+*:focus-visible {
+  outline: 3px solid var(--p5-yellow);
+  outline-offset: 2px;
+}
+
+/* Selection */
+::selection {
+  background: var(--p5-yellow);
+  color: var(--p5-black);
 }

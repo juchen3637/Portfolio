@@ -1,16 +1,23 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Epilogue, Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import { SidebarNav } from "./components/layout/SidebarNav";
+import { TopNav } from "./components/layout/TopNav";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const epilogue = Epilogue({
+  variable: "--font-epilogue",
+  subsets: ["latin"],
+  weight: ["700", "800", "900"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
+  weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -26,9 +33,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <SidebarNav />
-        <div className="pl-[72px] sm:pl-[84px] min-h-screen">{children}</div>
+      <body
+        className={`${epilogue.variable} ${inter.variable} ${spaceGrotesk.variable} antialiased bg-p5-bg text-p5-fg`}
+      >
+        <TopNav />
+        <div className="pt-20">{children}</div>
       </body>
     </html>
   );

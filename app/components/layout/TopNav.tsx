@@ -5,12 +5,19 @@ import { motion, useScroll, useSpring } from "framer-motion";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { MagneticButton } from "../ui/MagneticButton";
 
-const navItems = [
-  { href: "#about",      label: "ABOUT",     shortLabel: "ABOUT",  section: "about" },
-  { href: "#featured",   label: "WORK",      shortLabel: "WORK",   section: "featured" },
-  { href: "#skills",     label: "STACK",     shortLabel: "STACK",  section: "skills" },
-  { href: "#experience", label: "QUEST LOG", shortLabel: "QUEST",  section: "experience" },
-  { href: "#contact",    label: "SUMMON",    shortLabel: "SUMMON", section: "contact" },
+type NavItem = {
+  href: string;
+  label: string;
+  shortLabel: string;
+  section?: string; // only set for in-page anchor sections (used for active highlighting)
+};
+
+const navItems: NavItem[] = [
+  { href: "/#about",      label: "ABOUT",     shortLabel: "ABOUT",  section: "about" },
+  { href: "/#featured",   label: "WORK",      shortLabel: "WORK",   section: "featured" },
+  { href: "/#skills",     label: "STACK",     shortLabel: "STACK",  section: "skills" },
+  { href: "/#experience", label: "QUEST LOG", shortLabel: "QUEST",  section: "experience" },
+  { href: "/#contact",    label: "SUMMON",    shortLabel: "SUMMON", section: "contact" },
 ];
 
 export function TopNav() {
@@ -20,7 +27,9 @@ export function TopNav() {
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
-    const ids = navItems.map((n) => n.section);
+    const ids = navItems
+      .map((n) => n.section)
+      .filter((s): s is string => Boolean(s));
     ids.forEach((id) => {
       const el = document.getElementById(id);
       if (!el) return;

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Epilogue, Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { TopNav } from "./components/layout/TopNav";
@@ -24,6 +24,11 @@ export const metadata: Metadata = {
   title: "Justin Chen — LLM Integration Engineer",
   description:
     "Portfolio of Justin Chen: LLM integration, full-stack development, and AWS cloud architecture.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({

@@ -1,5 +1,5 @@
 "use client";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { HeroSection } from "./components/hero/HeroSection";
 import { GlowingProjectCard } from "./components/projects/GlowingProjectCard";
@@ -15,15 +15,27 @@ import {
 const workExperience: WorkExperience[] = [
   {
     type: "work",
+    company: "Jefferies Group LLC",
+    position: "Software Engineer",
+    location: "Jersey City, NJ",
+    startDate: "May 2025",
+    endDate: "Present",
+    achievements: [
+      "Consolidating and automating finance and HR data pipelines from Oracle PeopleSoft to Snowflake using Claude Code and Snowflake Openflow.",
+    ],
+    technologies: ["Claude Code", "Snowflake", "Snowflake Openflow", "Oracle PeopleSoft", "SQL"],
+  },
+  {
+    type: "work",
     company: "The Evaluation Company",
     position: "Software Engineer",
     location: "New York, NY",
     startDate: "Apr 2025",
-    endDate: "Present",
+    endDate: "May 2026",
     achievements: [
       "Built LLM-powered document-processing pipelines integrated with Salesforce and AWS EC2, automating transcript evaluation and data extraction for 200+ daily cases and reducing vendor costs by $93K/month.",
       "Deployed AWS CDK infrastructure for a multi-access portal; implemented CI/CD, RDS, S3, ElastiCache, and ECS/App Runner with full networking and security configuration.",
-      "Built FastAPI backend with SQLAlchemy ORM and async task processing via ARQ and Redis for multi-LLM document classification and PDF generation workflows.",
+      "Built a FastAPI backend with SQLAlchemy ORM and async task processing via ARQ and Redis for multi-LLM document classification and PDF generation workflows.",
     ],
     technologies: ["Python", "FastAPI", "AWS CDK", "Claude API", "Redis", "PostgreSQL"],
   },
@@ -78,169 +90,95 @@ export default function Home() {
   );
 }
 
-function AboutSection() {
-  return (
-    <Section
-      id="about"
-      eyebrow="01 / ABOUT"
-      headline="WHO IS THIS GUY?"
-      bgVariant="black"
-    >
-      <div className="grid md:grid-cols-3 gap-8 items-start">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5 }}
-          className="md:col-span-2 bg-p5-white text-p5-black p-6 sm:p-8 -rotate-1 shadow-p5"
-          style={{ clipPath: "polygon(2% 0, 100% 3%, 98% 100%, 0 97%)" }}
-        >
-          <p className="font-body text-base sm:text-lg leading-7">
-            I&apos;m Justin, a software engineer specializing in{" "}
-            <strong className="bg-p5-yellow text-p5-black px-1">LLM integration</strong>{" "}
-            and full-stack development. I build intelligent document-processing
-            pipelines, design scalable AWS cloud architectures, and create AI-powered
-            web applications — from multi-tenant SaaS platforms with real-time data
-            sync to automated evaluation systems using Claude and other LLM providers.
-            I enjoy solving complex problems at the intersection of language models
-            and production engineering.
-          </p>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex flex-col gap-4"
-        >
-          <StatTile label="BASED IN" value="NEW YORK" rotate={2} />
-          <StatTile label="FOCUS" value="LLM × FULL-STACK" rotate={-2} />
-          <StatTile label="STATUS" value="OPEN TO HIRE ★" highlight rotate={2} />
-        </motion.div>
-      </div>
-    </Section>
-  );
-}
-
-function StatTile({
-  label,
-  value,
-  highlight,
-  rotate = 0,
-}: {
-  label: string;
-  value: string;
-  highlight?: boolean;
-  rotate?: number;
-}) {
-  return (
-    <div
-      className={`p-4 shadow-p5-yellow ${
-        highlight ? "bg-p5-yellow text-p5-black animate-breathe" : "bg-p5-magenta text-p5-white"
-      }`}
-      style={{
-        transform: `rotate(${rotate}deg)`,
-        clipPath: "polygon(3% 0, 100% 4%, 97% 100%, 0 96%)",
-      }}
-    >
-      <div className="font-label text-xs tracking-widest opacity-80 mb-1">
-        {label}
-      </div>
-      <div className="font-display font-black tracking-tight uppercase text-xl">
-        {value}
-      </div>
-    </div>
-  );
-}
-
-// ── Section wrapper ─────────────────────────────────────────────────────────
+// ── Section wrapper ───────────────────────────────────────────────────────────
 
 function Section({
   id,
   eyebrow,
   headline,
-  bgVariant = "magenta",
+  intro,
   children,
 }: {
   id: string;
   eyebrow: string;
   headline: string;
-  bgVariant?: "magenta" | "black";
+  intro?: string;
   children: React.ReactNode;
 }) {
-  const isMagenta = bgVariant === "magenta";
   return (
-    <section
-      id={id}
-      className={`relative overflow-hidden py-20 sm:py-28 ${
-        isMagenta ? "bg-p5-magenta" : "bg-p5-bg"
-      }`}
-    >
-      {/* Halftone backdrop */}
-      <div
-        aria-hidden
-        className={`absolute inset-0 pointer-events-none opacity-10 ${
-          isMagenta ? "halftone-white" : "halftone-red"
-        } animate-halftone-drift`}
-      />
-
-      {/* Tilted black slash decoration */}
-      {isMagenta && (
-        <div
-          aria-hidden
-          className="absolute top-1/3 -right-20 w-96 h-32 bg-p5-black -rotate-6 opacity-90 pointer-events-none"
-          style={{ clipPath: "polygon(0 20%, 100% 0, 100% 100%, 0 80%)" }}
-        />
-      )}
-
-      <div className="relative mx-auto max-w-[1440px] px-6 sm:px-10">
-        <SectionHeader eyebrow={eyebrow} headline={headline} bgVariant={bgVariant} />
+    <section id={id} className="border-t border-border py-20 sm:py-28">
+      <div className="mx-auto max-w-6xl px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-12 max-w-2xl"
+        >
+          <p className="eyebrow">{eyebrow}</p>
+          <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">
+            {headline}
+          </h2>
+          {intro && <p className="mt-4 text-lg leading-8 text-muted">{intro}</p>}
+        </motion.div>
         {children}
       </div>
     </section>
   );
 }
 
-function SectionHeader({
-  eyebrow,
-  headline,
-  bgVariant,
-}: {
-  eyebrow: string;
-  headline: string;
-  bgVariant: "magenta" | "black";
-}) {
-  const [glitched, setGlitched] = useState(false);
-  return (
-    <div className="mb-12 sm:mb-16">
-      {/* Eyebrow */}
-      <motion.div
-        initial={{ opacity: 0, x: -20 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.4 }}
-        className={`inline-block ${
-          bgVariant === "magenta" ? "bg-p5-black text-p5-white" : "bg-p5-magenta text-p5-white"
-        } font-label font-bold text-xs tracking-widest px-3 py-1.5 -rotate-2 mb-4 shadow-p5-yellow`}
-        style={{ clipPath: "polygon(4% 0, 100% 0, 96% 100%, 0 100%)" }}
-      >
-        {eyebrow}
-      </motion.div>
+// ── About ─────────────────────────────────────────────────────────────────────
 
-      {/* Slashing headline */}
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        onViewportEnter={() => setGlitched(true)}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className={`font-display font-black uppercase tracking-tighter text-5xl sm:text-7xl md:text-8xl leading-none italic text-p5-white ${
-          glitched ? "animate-glitch-burst" : ""
-        }`}
-      >
-        {headline}
-      </motion.h2>
+function AboutSection() {
+  return (
+    <Section id="about" eyebrow="01 / About" headline="Engineer at the intersection of LLMs and production systems">
+      <div className="grid gap-10 md:grid-cols-3">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="md:col-span-2"
+        >
+          <p className="text-lg leading-8 text-muted">
+            I&apos;m Justin — a software engineer who specializes in turning large
+            language models into reliable, shippable products. I build intelligent
+            document-processing pipelines, design scalable AWS cloud architectures,
+            and create AI-powered web apps: multi-tenant SaaS platforms with
+            real-time data, and automated evaluation systems built on Claude and
+            other LLM providers.
+          </p>
+          <p className="mt-4 text-lg leading-8 text-muted">
+            I like the hard part — the seam where language models meet real
+            production engineering. Beyond full-time work, I also take on select
+            freelance and consulting projects for teams and local businesses
+            looking to ship AI features.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+          className="flex flex-col gap-px overflow-hidden rounded-xl border border-border bg-border"
+        >
+          <StatTile label="Based in" value="New York, NY" />
+          <StatTile label="Focus" value="LLM × Full-stack" />
+          <StatTile label="Currently" value="Jefferies Group LLC" />
+        </motion.div>
+      </div>
+    </Section>
+  );
+}
+
+function StatTile({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="bg-surface p-5">
+      <div className="eyebrow">{label}</div>
+      <div className="mt-1 font-display text-lg font-bold tracking-tight text-ink">
+        {value}
+      </div>
     </div>
   );
 }
@@ -251,46 +189,40 @@ function FeaturedProjects() {
   return (
     <Section
       id="featured"
-      eyebrow="02 / WORK"
-      headline="PROJECTS / EQUIPPED"
-      bgVariant="black"
+      eyebrow="02 / Work"
+      headline="Selected work"
+      intro="A few projects that show how I take LLM-powered systems from idea to production."
     >
-      <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
+      <div className="grid gap-6 md:grid-cols-3">
         <GlowingProjectCard
           index={1}
           title="Cura"
-          subtitle="AI Resume Persona · NULL: Rewrites"
-          description="AI-powered resume tailoring platform that generates job-specific resumes from a master profile using Claude API. Features intelligent content curation, keyword optimization, inline AI suggestions, and PDF parsing via Claude Vision."
-          tech={["Next.js", "TypeScript", "Claude API", "Supabase", "PostgreSQL", "TanStack Query", "Zustand", "Tailwind"]}
+          tagline="AI résumé tailoring"
+          description="AI-powered résumé platform that generates job-specific résumés from a master profile using the Claude API — with intelligent content curation, keyword optimization, inline AI suggestions, and PDF parsing via Claude Vision."
+          tech={["Next.js", "TypeScript", "Claude API", "Supabase", "PostgreSQL", "TanStack Query"]}
           link="https://cura-resume.vercel.app"
-          cta="VIEW LIVE →"
-          rarity="★★★★ EPIC"
+          cta="View live"
           image="/cura-preview.png"
-          rotate={-2}
         />
         <GlowingProjectCard
           index={2}
           title="Alpaca Trading Agent"
-          subtitle="Algo-Trading Persona · STR: Shipping"
-          description="End-to-end algorithmic trading system in Python with the Alpaca REST/WebSocket API; deployed on AWS EC2 as a persistent systemd service with a Dash monitoring dashboard. Includes an agentic CI/CD pipeline using Claude Code in rootless Podman containers."
-          tech={["Python", "Alpaca API", "AWS EC2", "Dash", "Claude Code", "Podman", "Telegram", "systemd"]}
+          tagline="Algorithmic trading system"
+          description="End-to-end algorithmic trading system in Python on the Alpaca REST/WebSocket API, deployed to AWS EC2 as a persistent systemd service with a Dash monitoring dashboard and an agentic CI/CD pipeline running Claude Code in rootless Podman containers."
+          tech={["Python", "Alpaca API", "AWS EC2", "Dash", "Claude Code", "Podman"]}
           link="https://github.com/juchen3637/AlpacaTradingAgent"
-          cta="GITHUB →"
-          rarity="★★★ RARE"
-          image="/alpaca-trading-preview.png"
-          rotate={1}
+          cta="View on GitHub"
+          image="/predict-market-preview.png"
         />
         <GlowingProjectCard
           index={3}
           title="Predict-Market-Bot"
-          subtitle="Ensemble Persona · WEAK: Sleep"
-          description="Automated prediction market trading system scanning Kalshi and Polymarket, using a multi-LLM ensemble (Anthropic, OpenAI, Gemini) and XGBoost with Kelly criterion position sizing. Deployed microservices on AWS EC2 with Prometheus/Grafana observability."
-          tech={["Python", "XGBoost", "Claude", "OpenAI", "Gemini", "Prometheus", "Grafana", "AWS EC2"]}
+          tagline="Multi-LLM prediction markets"
+          description="Automated prediction-market trading system scanning Kalshi and Polymarket, using a multi-LLM ensemble (Anthropic, OpenAI, Gemini) and XGBoost with Kelly-criterion position sizing. Deployed as microservices on AWS EC2 with Prometheus/Grafana observability."
+          tech={["Python", "XGBoost", "Claude", "OpenAI", "Gemini", "Prometheus", "Grafana"]}
           link="https://github.com/juchen3637/predict-market-bot"
-          cta="GITHUB →"
-          rarity="★★★★ EPIC"
-          image="/predict-market-preview.png"
-          rotate={-1}
+          cta="View on GitHub"
+          image="/alpaca-trading-preview.png"
         />
       </div>
     </Section>
@@ -301,12 +233,7 @@ function FeaturedProjects() {
 
 function SkillsSection() {
   return (
-    <Section
-      id="skills"
-      eyebrow="03 / STACK"
-      headline="WEAPONS & ARTS"
-      bgVariant="magenta"
-    >
+    <Section id="skills" eyebrow="03 / Stack" headline="Tools I build with">
       <SkillsGrid />
     </Section>
   );
@@ -316,23 +243,14 @@ function SkillsSection() {
 
 function ExperienceSection() {
   return (
-    <Section
-      id="experience"
-      eyebrow="04 / DEEDS"
-      headline="QUEST LOG"
-      bgVariant="black"
-    >
-      <div className="grid md:grid-cols-2 gap-10">
+    <Section id="experience" eyebrow="04 / Experience" headline="Where I've worked & studied">
+      <div className="grid gap-12 md:grid-cols-2">
         <div>
-          <h3 className="font-label font-bold text-xs tracking-widest text-p5-yellow mb-6">
-            ▸ WORK EXPERIENCE
-          </h3>
+          <h3 className="eyebrow mb-8">Experience</h3>
           <AnimatedTimeline entries={workExperience} />
         </div>
         <div>
-          <h3 className="font-label font-bold text-xs tracking-widest text-p5-yellow mb-6">
-            ▸ EDUCATION
-          </h3>
+          <h3 className="eyebrow mb-8">Education</h3>
           <AnimatedTimeline entries={education} />
         </div>
       </div>
@@ -372,125 +290,83 @@ function ContactSection() {
   return (
     <Section
       id="contact"
-      eyebrow="05 / SUMMON"
-      headline="TAKE MY HEART → HIRE ME"
-      bgVariant="magenta"
+      eyebrow="05 / Contact"
+      headline="Let's build something"
+      intro="Open to full-time roles and available for select freelance and consulting projects. The fastest way to reach me is email."
     >
-      <div className="grid md:grid-cols-2 gap-8">
-        {/* Contact info card */}
+      <div className="grid gap-8 md:grid-cols-2">
+        {/* Contact info */}
         <motion.div
-          initial={{ opacity: 0, y: 20, rotate: -3 }}
-          whileInView={{ opacity: 1, y: 0, rotate: -2 }}
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5 }}
-          className="bg-p5-black text-p5-white p-6 sm:p-8 shadow-p5-yellow"
-          style={{ clipPath: "polygon(2% 0, 100% 3%, 98% 100%, 0 97%)" }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="flex flex-col gap-6 rounded-xl border border-border bg-surface p-6 sm:p-8"
         >
-          <div className="bg-p5-magenta inline-block px-3 py-1 -rotate-1 font-display font-black uppercase tracking-tight text-lg mb-6">
-            CONTACT INFO
+          <div>
+            <div className="eyebrow">Email</div>
+            <a
+              href="mailto:juchen3637@gmail.com"
+              className="mt-1 block font-display text-lg font-bold tracking-tight text-accent hover:underline"
+            >
+              juchen3637@gmail.com
+            </a>
           </div>
-          <div className="space-y-4 font-label">
-            <div>
-              <div className="text-xs text-p5-fg-muted tracking-widest mb-1">EMAIL</div>
-              <a
-                href="mailto:juchen3637@gmail.com"
-                className="text-p5-yellow hover:underline font-display font-bold text-lg"
-              >
-                juchen3637@gmail.com
-              </a>
-            </div>
-            <div>
-              <div className="text-xs text-p5-fg-muted tracking-widest mb-1">LOCATION</div>
-              <div className="font-display font-bold text-lg">New York, NY</div>
-            </div>
-            <div>
-              <div className="text-xs text-p5-fg-muted tracking-widest mb-1">STATUS</div>
-              <div className="bg-p5-yellow text-p5-black inline-block px-2 py-0.5 font-display font-black text-sm animate-breathe">
-                ★ OPEN TO HIRE ★
-              </div>
+          <div>
+            <div className="eyebrow">Location</div>
+            <div className="mt-1 font-display text-lg font-bold tracking-tight text-ink">
+              New York, NY
             </div>
           </div>
-          <p className="mt-6 font-display italic text-sm text-p5-fg-muted">
-            {"// fastest reply via email"}
-          </p>
+          <div>
+            <div className="eyebrow">Status</div>
+            <span className="mt-1 inline-flex items-center gap-1.5 rounded-full bg-ok-soft px-3 py-1 text-sm font-medium text-ok ring-1 ring-ok/20">
+              <span className="h-1.5 w-1.5 rounded-full bg-ok" />
+              Open to work
+            </span>
+          </div>
         </motion.div>
 
-        {/* Contact form */}
+        {/* Form */}
         <motion.form
-          initial={{ opacity: 0, y: 20, rotate: 3 }}
-          whileInView={{ opacity: 1, y: 0, rotate: 2 }}
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
           onSubmit={handleSubmit}
-          className="bg-p5-white text-p5-black shadow-p5-black"
-          style={{ clipPath: "polygon(2% 0, 100% 3%, 98% 100%, 0 97%)" }}
+          className="rounded-xl border border-border bg-surface p-6 sm:p-8"
         >
-          <div className="bg-p5-magenta px-4 py-2 font-display font-black uppercase tracking-tight text-lg text-p5-white">
-            SEND MESSAGE
-          </div>
-          <div className="p-6 sm:p-8 space-y-4">
-            <FormField label="NAME" name="name" placeholder="Your designation" required />
-            <FormField label="EMAIL" name="email" type="email" placeholder="transmission@node" required />
-            <FormField label="MESSAGE" name="message" textarea placeholder="Decode thoughts here..." required />
+          {status === "success" ? (
+            <div className="flex h-full min-h-[16rem] flex-col items-center justify-center text-center">
+              <div className="font-display text-xl font-bold tracking-tight text-ink">
+                Message received.
+              </div>
+              <p className="mt-2 text-sm text-muted">Thanks — I&apos;ll be in touch soon.</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <FormField label="Name" name="name" placeholder="Your name" required />
+              <FormField label="Email" name="email" type="email" placeholder="you@company.com" required />
+              <FormField label="Message" name="message" textarea placeholder="What are you working on?" required />
 
-            {status === "error" && (
-              <p className="font-display italic font-bold text-red-700">
-                Critical miss. Please try again.
-              </p>
-            )}
+              {status === "error" && (
+                <p className="text-sm font-medium text-red-600">
+                  Something went wrong. Please try again or email me directly.
+                </p>
+              )}
 
-            <button
-              type="submit"
-              disabled={status === "submitting" || status === "success"}
-              className="bg-p5-black text-p5-white font-display font-black tracking-tight uppercase text-base px-6 py-3 shadow-p5 hover:bg-p5-yellow hover:text-p5-black disabled:opacity-60 disabled:cursor-not-allowed transition-colors -rotate-1"
-              style={{ clipPath: "polygon(4% 0, 100% 4%, 96% 100%, 0 96%)" }}
-            >
-              {status === "submitting" ? "Sending…" : "Send →"}
-            </button>
-          </div>
+              <button
+                type="submit"
+                disabled={status === "submitting"}
+                className="w-full rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {status === "submitting" ? "Sending…" : "Send message"}
+              </button>
+            </div>
+          )}
         </motion.form>
       </div>
-
-      <AttackLandedSplash show={status === "success"} />
     </Section>
-  );
-}
-
-function AttackLandedSplash({ show }: { show: boolean }) {
-  return (
-    <AnimatePresence>
-      {show && (
-        <motion.div
-          key="splash"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 0.3 } }}
-          className="absolute inset-0 z-30 pointer-events-none flex items-center justify-center"
-        >
-          <div
-            aria-hidden
-            className="absolute inset-0 bg-p5-magenta-deep animate-splash-wipe-in"
-          />
-          <motion.div
-            initial={{ scale: 0.4, rotate: -10, opacity: 0 }}
-            animate={{ scale: 1, rotate: -3, opacity: 1 }}
-            exit={{ scale: 0.7, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 500, damping: 18, delay: 0.2 }}
-            className="relative bg-p5-yellow text-p5-black font-display font-black uppercase tracking-tighter italic text-5xl sm:text-7xl px-8 py-4 shadow-p5-black"
-            style={{ clipPath: "polygon(2% 0, 100% 4%, 98% 100%, 0 96%)" }}
-          >
-            ★ ATTACK LANDED ★
-          </motion.div>
-          <motion.div
-            initial={{ y: 30, opacity: 0 }}
-            animate={{ y: 80, opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.4 }}
-            className="absolute bottom-1/3 font-display italic font-bold text-p5-white text-lg"
-          >
-            Talk soon — message received.
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
   );
 }
 
@@ -510,12 +386,10 @@ function FormField({
   textarea?: boolean;
 }) {
   const baseClass =
-    "w-full bg-p5-white text-p5-black border-[3px] border-p5-black px-3 py-2.5 font-body text-sm placeholder:text-p5-black/35 focus:outline-none focus:border-p5-magenta focus:ring-2 focus:ring-p5-magenta transition-colors";
+    "w-full rounded-lg border border-border bg-bg px-3.5 py-2.5 text-sm text-ink placeholder:text-faint focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-colors";
   return (
     <label className="block">
-      <span className="block font-label font-bold text-xs tracking-widest mb-1.5">
-        {label}
-      </span>
+      <span className="eyebrow mb-1.5 block">{label}</span>
       {textarea ? (
         <textarea
           name={name}
@@ -541,25 +415,13 @@ function FormField({
 
 function Footer() {
   return (
-    <footer className="relative bg-p5-black text-p5-white py-10 px-6 sm:px-10 overflow-hidden">
-      <div
-        aria-hidden
-        className="absolute inset-0 halftone-red opacity-10 pointer-events-none"
-      />
-      <div className="relative mx-auto max-w-[1440px] flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="group font-display font-black uppercase text-2xl tracking-tighter cursor-default">
-          JUSTIN
-          <span className="text-p5-magenta inline-block transition-colors group-hover:text-p5-yellow">.</span>
-          CHEN
+    <footer className="border-t border-border py-10">
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 sm:flex-row">
+        <div className="font-display text-lg font-extrabold tracking-tight text-ink">
+          Justin Chen
         </div>
-        <div className="group relative font-label text-xs tracking-widest text-p5-fg-muted cursor-default">
-          <span className="relative inline-block">
-            © {new Date().getFullYear()} · NO MORE GAMES
-            <span
-              aria-hidden
-              className="pointer-events-none absolute left-0 top-1/2 h-[2px] w-full origin-left scale-x-0 bg-p5-yellow transition-transform duration-300 group-hover:scale-x-100"
-            />
-          </span>
+        <div className="font-mono text-xs text-faint">
+          © {new Date().getFullYear()} · Built with Next.js
         </div>
       </div>
     </footer>

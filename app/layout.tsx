@@ -1,12 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Epilogue, Inter, Space_Grotesk } from "next/font/google";
+import { Epilogue, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { TopNav } from "./components/layout/TopNav";
 
 const epilogue = Epilogue({
   variable: "--font-epilogue",
   subsets: ["latin"],
-  weight: ["700", "800", "900"],
+  weight: ["600", "700", "800"],
 });
 
 const inter = Inter({
@@ -14,16 +14,16 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
-  title: "Justin Chen — LLM Integration Engineer",
+  title: "Justin Chen — AI Software Engineer",
   description:
-    "Portfolio of Justin Chen: LLM integration, full-stack development, and AWS cloud architecture.",
+    "Justin Chen builds LLM-powered products — document pipelines, trading agents, and AI web apps. AI software engineer based in New York.",
 };
 
 export const viewport: Viewport = {
@@ -39,10 +39,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${epilogue.variable} ${inter.variable} ${spaceGrotesk.variable} antialiased bg-p5-bg text-p5-fg`}
+        className={`${epilogue.variable} ${inter.variable} ${jetbrainsMono.variable} antialiased bg-bg text-ink`}
       >
         <TopNav />
-        <div className="pt-20">{children}</div>
+        <div className="pt-16">{children}</div>
       </body>
     </html>
   );
